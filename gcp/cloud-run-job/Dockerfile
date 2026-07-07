@@ -5,13 +5,13 @@ ENV VENV=/opt/venv
 RUN python3 -m venv $VENV
 ENV PATH="$VENV/bin:$PATH"
 
-WORKDIR /app
+WORKDIR /arp
 COPY ./app/requirements.txt .
 RUN python3 -m pip install -r requirements.txt --require-hashes --no-deps
 
-COPY gcp/workload-vm/start.sh start.sh
-COPY gcp/workload-vm/main.sh main.sh
-COPY gcp/settings.ini settings.ini
+COPY app ./app                              # bake the application in (no GCS pull at runtime)
+COPY gcp/cloud-run-job/main.sh ./main.sh
+COPY gcp/settings.ini ./settings.ini
+RUN chmod +x ./main.sh ./app/run-local.sh
 
-# Run the app
 ENTRYPOINT ["./main.sh"]

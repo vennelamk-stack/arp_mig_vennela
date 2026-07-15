@@ -18,6 +18,7 @@ SETTING_FILE="${SCRIPT_PATH}/settings.ini"
 NAME=$(git config -f $SETTING_FILE config.name)
 PROJECT_ID=$(gcloud config get-value project 2> /dev/null)
 
+QUERY="resource.type%3D%22cloud_run_job%22%20resource.labels.job_name%3D%22${NAME}%22"
 echo "Click the link below to get access to application logs for the last 7 days"
-echo "https://console.cloud.google.com/logs/query;query=logName%3D%22projects%2F${PROJECT_ID}%2Flogs%2F${NAME}%22;duration=P7D?project=${PROJECT_ID}"
+echo "https://console.cloud.google.com/logs/query;query=${QUERY};duration=P7D?project=${PROJECT_ID}"
 
